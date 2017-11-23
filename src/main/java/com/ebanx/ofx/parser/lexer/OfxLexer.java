@@ -14,7 +14,7 @@ public interface OfxLexer {
      * The tokens are scanned line by line, so if there is a text content that spans to two lines
      * two {@link Text} objects will be created and returned separately.
      *
-     * Empty spaces are not trimmed, so if there is a tag with just empty spaces (e.g. "<     >")
+     * Empty spaces are not trimmed, so if there is a tag with just empty spaces (e.g. "&lt;     &gt;")
      * a {@link OpenTag} will be returned with the spaces as `tagName`
      *
      * @return the next token found in the input stream.
