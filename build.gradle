@@ -1,0 +1,16 @@
+group 'com.ebanx'
+version '1.0-SNAPSHOT'
+
+apply plugin: 'java'
+
+sourceCompatibility = 1.8
+
+repositories {
+    jcenter()
+}
+
+dependencies {
+    compile 'commons-codec:commons-codec:1.11'
+    compileOnly 'org.projectlombok:lombok:1.16.18'
+    testCompile 'junit:junit:4.12'
+}
