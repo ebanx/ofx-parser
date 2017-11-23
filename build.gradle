@@ -36,7 +36,7 @@ artifacts {
 
 publishing {
     publications {
-        maven(MavenPublication) {
+        mavenJava(MavenPublication) {
             from components.java
 
             artifact sourcesJar
@@ -48,11 +48,11 @@ publishing {
 bintray {
     user = bintray_user
     key = bintray_api_key
-    publications = ['maven']
+    publications = ['mavenJava']
     dryRun = false
     publish = true
     pkg {
-        repo = 'ofx-parser'
+        repo = 'maven'
         name = 'ofx-parser'
         licenses = ['Apache-2.0']
         vcsUrl = 'https://github.com/jonhkr/ofx-parser.git'
