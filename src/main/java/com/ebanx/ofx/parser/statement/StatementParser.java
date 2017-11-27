@@ -6,8 +6,11 @@ import com.ebanx.ofx.parser.lexer.*;
 import java.io.IOException;
 import java.io.InputStream;
 import java.math.BigDecimal;
+import java.time.LocalDate;
+import java.time.format.DateTimeFormatter;
 
 public class StatementParser {
+    private final static DateTimeFormatter DATE_FORMATTER = DateTimeFormatter.ofPattern("yyyyMMdd");
 
     private final OfxLexer lexer;
 
@@ -77,7 +80,11 @@ public class StatementParser {
                 tx.setType(content);
                 break;
             case "DTPOSTED":
-                tx.setDate(content);
+                if (content.length() < 8) {
+                    throw new OfxParseException("Invalid date: " + content);
+                }
+
+                tx.setDate(LocalDate.parse(content.substring(0, 8), DATE_FORMATTER));
                 break;
             case "TRNAMT":
                 String amt = content.replace(",", ".");

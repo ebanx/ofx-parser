@@ -1,18 +1,17 @@
 package com.ebanx.ofx.parser.statement;
 
 import lombok.Data;
-import org.apache.commons.codec.binary.Hex;
+import org.apache.commons.codec.digest.DigestUtils;
 
 import java.math.BigDecimal;
-import java.security.MessageDigest;
-import java.security.NoSuchAlgorithmException;
+import java.time.LocalDate;
 
 @Data
 public class Transaction {
     private String id;
     private String code;
     private String type;
-    private String date;
+    private LocalDate date;
     private BigDecimal amount;
     private String description;
 
@@ -21,13 +20,7 @@ public class Transaction {
             return;
         }
 
-        try {
-            MessageDigest digest = MessageDigest.getInstance("SHA-1");
-            digest.update((code + date).getBytes());
-            this.setId(Hex.encodeHexString(digest.digest()));
-        } catch (NoSuchAlgorithmException e) {
-            e.printStackTrace();
-        }
+        this.setId(DigestUtils.sha1Hex((code + date).getBytes()));
     }
 
     public void setCode(String code) {
@@ -35,7 +28,7 @@ public class Transaction {
         calculateId();
     }
 
-    public void setDate(String date) {
+    public void setDate(LocalDate date) {
         this.date = date;
         calculateId();
     }
