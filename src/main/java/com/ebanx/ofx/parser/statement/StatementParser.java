@@ -48,7 +48,11 @@ public class StatementParser {
 
                         currentOpenTag = openTag.getTagName();
                         break;
+                    case "DTSERVER":
+                        currentOpenTag = openTag.getTagName();
+                        break;
                     default:
+                        currentOpenTag = null;
                         break;
                 }
             }
@@ -56,8 +60,8 @@ public class StatementParser {
             if (token instanceof Text) {
                 Text text = (Text) token;
 
-                if (currTransaction != null && currentOpenTag != null) {
-                    addContent(currTransaction, currentOpenTag, text.getContent().trim());
+                if (currentOpenTag != null) {
+                    addContent(statement, currTransaction, currentOpenTag, text.getContent().trim());
                 }
             }
 
@@ -74,7 +78,7 @@ public class StatementParser {
         return statement;
     }
 
-    private void addContent(Transaction tx, String tag, String content) {
+    private void addContent(Statement statement, Transaction tx, String tag, String content) {
         switch (tag) {
             case "TRNTYPE":
                 tx.setType(content);
@@ -96,6 +100,13 @@ public class StatementParser {
             case "MEMO":
                 tx.setDescription(concat(tx.getDescription(), content));
                 break;
+            case "DTSERVER":
+            if (content.length() < 8) {
+                throw new OfxParseException("Invalid date: " + content);
+            }
+
+            statement.addOfxDate(LocalDate.parse(content.substring(0, 8), DATE_FORMATTER));
+            break;
         }
     }
 
